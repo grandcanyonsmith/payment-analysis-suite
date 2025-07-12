@@ -491,23 +491,68 @@
             slides[currentSlide].style.display = 'none';
             currentSlide = (n + slides.length) % slides.length;
             slides[currentSlide].style.display = 'flex';
+            
+            // Update URL hash for direct linking
+            window.location.hash = `slide-${currentSlide + 1}`;
         }
         
-        // Show first slide
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+        
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            } else if (e.key === 'Home') {
+                showSlide(0);
+            } else if (e.key === 'End') {
+                showSlide(slides.length - 1);
+            }
+        });
+        
+        // Click navigation
+        document.addEventListener('click', (e) => {
+            if (e.clientX > window.innerWidth / 2) {
+                nextSlide();
+            } else {
+                prevSlide();
+            }
+        });
+        
+        // Touch navigation for mobile
+        let touchStartX = 0;
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+        
+        document.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].screenX;
+            if (touchEndX < touchStartX - 50) {
+                nextSlide();
+            } else if (touchEndX > touchStartX + 50) {
+                prevSlide();
+            }
+        });
+        
+        // Show first slide or navigate to hash
         slides.forEach((slide, index) => {
             slide.style.display = index === 0 ? 'flex' : 'none';
         });
         
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') showSlide(currentSlide + 1);
-            if (e.key === 'ArrowLeft') showSlide(currentSlide - 1);
-        });
-        
-        // Click navigation
-        document.addEventListener('click', () => {
-            showSlide(currentSlide + 1);
-        });
+        // Check for hash navigation
+        if (window.location.hash) {
+            const slideNum = parseInt(window.location.hash.replace('#slide-', '')) - 1;
+            if (slideNum >= 0 && slideNum < slides.length) {
+                showSlide(slideNum);
+            }
+        }
     </script>
 </body>
 </html> 
