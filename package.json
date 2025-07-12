@@ -1,0 +1,12 @@
+{
+  "name": "payment-analysis-presentation",
+  "version": "1.0.0",
+  "description": "Payment Analysis Report Presentation",
+  "scripts": {
+    "dev": "python -m http.server 8000 --directory presentation",
+    "build": "echo 'No build required for static site'"
+  },
+  "keywords": ["presentation", "payment-analysis", "report"],
+  "author": "",
+  "license": "MIT"
+}
