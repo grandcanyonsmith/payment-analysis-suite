@@ -1,0 +1,6 @@
+failure_reason,count,percentage,total_revenue_lost,avg_revenue_per_customer,trial_count,direct_count
+no_payment_method,252,93.68029739776952,32092.699999999997,127.35198412698412,188,64
+card_declined,8,2.973977695167286,244.0,30.5,2,6
+payment_intent_payment_attempt_failed,4,1.486988847583643,244.0,61.0,2,2
+payment_method_provider_decline,3,1.1152416356877324,0.0,0.0,0,3
+Unknown,2,0.7434944237918215,294.0,147.0,2,0

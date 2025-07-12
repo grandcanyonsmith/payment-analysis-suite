@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Analysis - Key Findings</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0e27;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+        }
+        
+        .slide-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+        
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #667eea;
+        }
+        
+        h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #a5b4fc;
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            color: #94a3b8;
+            margin-bottom: 3rem;
+        }
+        
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .metric-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        
+        .metric-label {
+            color: #cbd5e1;
+            font-size: 1rem;
+        }
+        
+        .warning-box {
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid #ef4444;
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .success-box {
+            background: rgba(34, 197, 94, 0.1);
+            border: 2px solid #22c55e;
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .action-list {
+            text-align: left;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .action-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #667eea;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+        
+        .action-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+        
+        .action-detail {
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+        
+        .chart-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            max-width: 800px;
+            margin: 2rem auto;
+            border-collapse: collapse;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .comparison-table th {
+            background: rgba(102, 126, 234, 0.2);
+            font-weight: 600;
+        }
+        
+        .slide-number {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        
+        .emphasis {
+            color: #f97316;
+            font-weight: 700;
+        }
+        
+        .timeline {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 3rem 0;
+            position: relative;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.2);
+            z-index: -1;
+        }
+        
+        .timeline-item {
+            background: #0a0e27;
+            padding: 1rem 2rem;
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .timeline-date {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-bottom: 0.5rem;
+        }
+        
+        .timeline-event {
+            font-weight: 600;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide 1: Title -->
+    <div class="slide">
+        <div class="slide-content">
+            <h1>Payment Analysis Report</h1>
+            <p class="subtitle">Critical Findings & Immediate Action Required</p>
+            <div class="warning-box">
+                <h3>⚠️ Business Critical Alert</h3>
+                <p style="font-size: 1.3rem; margin-top: 1rem;">
+                    Your business is losing <span class="emphasis">$12,307 per month</span> in recurring revenue
+                </p>
+            </div>
+        </div>
+        <div class="slide-number">1 / 8</div>
+    </div>
+
+    <!-- Slide 2: Executive Summary -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2>Executive Summary</h2>
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <div class="metric-value">$147,679</div>
+                    <div class="metric-label">Annual Revenue Loss</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">78</div>
+                    <div class="metric-label">Customers Lost (4 months)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">78.3%</div>
+                    <div class="metric-label">Trial Failure Rate</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">14.1x</div>
+                    <div class="metric-label">Higher Risk vs Direct</div>
+                </div>
+            </div>
+            <div class="warning-box" style="margin-top: 3rem;">
+                <p><strong>Key Finding:</strong> 100% of payment failures come from trial customers</p>
+            </div>
+        </div>
+        <div class="slide-number">2 / 8</div>
+    </div>
+
+    <!-- Slide 3: The Problem -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2>The Core Problem</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Customer Type</th>
+                        <th>Total Customers</th>
+                        <th>Failed Payments</th>
+                        <th>Failure Rate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Trial Customers</td>
+                        <td>46</td>
+                        <td>36</td>
+                        <td><span class="emphasis">78.3%</span></td>
+                    </tr>
+                    <tr>
+                        <td>Direct Subscribers</td>
+                        <td>144</td>
+                        <td>8</td>
+                        <td>5.6%</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">Day 0</div>
+                    <div class="timeline-event">Customer Signs Up</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Day 1-30</div>
+                    <div class="timeline-event">Free Trial Period</div>
+                </div>
+                <div class="timeline-item" style="border-color: #ef4444;">
+                    <div class="timeline-date">Day 31</div>
+                    <div class="timeline-event" style="color: #ef4444;">Payment Fails</div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">3 / 8</div>
+    </div>
+
+    <!-- Slide 4: Financial Impact -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2>Financial Impact Analysis</h2>
+            <div class="chart-container">
+                <h3>Monthly Revenue Loss Breakdown</h3>
+                <div class="metric-grid" style="margin-top: 2rem;">
+                    <div class="metric-card">
+                        <div class="metric-value">$6,709</div>
+                        <div class="metric-label">May 2025 Cohort (44 customers)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">$5,598</div>
+                        <div class="metric-label">June 2025 Cohort (34 customers)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">$295,358</div>
+                        <div class="metric-label">24-Month Lifetime Value Lost</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">~40</div>
+                        <div class="metric-label">New Failures Expected/Month</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">4 / 8</div>
+    </div>
+
+    <!-- Slide 5: Root Causes -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2>Root Cause Analysis</h2>
+            <div class="action-list">
+                <div class="action-item" style="border-left-color: #ef4444;">
+                    <div class="action-title">🚫 No Payment Validation</div>
+                    <div class="action-detail">
+                        Customers complete entire 30-day trials without any payment method verification
+                    </div>
+                </div>
+                <div class="action-item" style="border-left-color: #ef4444;">
+                    <div class="action-title">💳 Prepaid Cards Accepted</div>
+                    <div class="action-detail">
+                        55% failure rate on prepaid cards - representing 16% of all failures
+                    </div>
+                </div>
+                <div class="action-item" style="border-left-color: #ef4444;">
+                    <div class="action-title">⏰ 30-Day Discovery Delay</div>
+                    <div class="action-detail">
+                        Invalid payment methods only discovered after full trial period expires
+                    </div>
+                </div>
+                <div class="action-item" style="border-left-color: #ef4444;">
+                    <div class="action-title">📧 No Dunning Process</div>
+                    <div class="action-detail">
+                        Failed payments are not followed up with recovery attempts
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">5 / 8</div>
+    </div>
+
+    <!-- Slide 6: Immediate Actions -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2>Immediate Action Plan</h2>
+            <div class="action-list">
+                <div class="action-item" style="border-left-color: #22c55e;">
+                    <div class="action-title">1️⃣ Payment Validation (TODAY)</div>
+                    <div class="action-detail">
+                        • Implement $1 authorization hold at signup<br>
+                        • Block prepaid and virtual cards<br>
+                        • Require 3D Secure authentication<br>
+                        <strong>Impact: Prevent 55% of failures immediately</strong>
+                    </div>
+                </div>
+                <div class="action-item" style="border-left-color: #22c55e;">
+                    <div class="action-title">2️⃣ Trial Strategy (THIS WEEK)</div>
+                    <div class="action-detail">
+                        • Reduce trial period to 7-14 days<br>
+                        • Require valid payment upfront<br>
+                        • Consider eliminating trials for high-risk segments<br>
+                        <strong>Impact: Reduce discovery delay by 50-75%</strong>
+                    </div>
+                </div>
+                <div class="action-item" style="border-left-color: #22c55e;">
+                    <div class="action-title">3️⃣ Recovery Campaign (NEXT WEEK)</div>
+                    <div class="action-detail">
+                        • Contact all 78 delinquent customers<br>
+                        • Offer 20% discount for reactivation<br>
+                        • Each recovery = $3,787 lifetime value<br>
+                        <strong>Impact: Recover up to $295,358 in lost LTV</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">6 / 8</div>
+    </div>
+
+    <!-- Slide 7: Implementation Timeline -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2>Implementation Roadmap</h2>
+            <div class="timeline" style="flex-direction: column; align-items: stretch;">
+                <div class="action-item">
+                    <div class="action-title">Week 1: Emergency Fixes</div>
+                    <div class="action-detail">
+                        • Enable Stripe Radar rules<br>
+                        • Block prepaid cards<br>
+                        • Add $1 authorization hold<br>
+                        • Set up daily monitoring dashboard
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-title">Week 2: Trial Optimization</div>
+                    <div class="action-detail">
+                        • Implement 14-day trial period<br>
+                        • Add payment method requirement<br>
+                        • Create segmented trial offers<br>
+                        • Launch recovery email campaign
+                    </div>
+                </div>
+                <div class="action-item">
+                    <div class="action-title">Week 3-4: Long-term Solutions</div>
+                    <div class="action-detail">
+                        • Implement Smart Dunning system<br>
+                        • Set up cohort analytics<br>
+                        • Create automated alerts<br>
+                        • Develop retention strategies
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">7 / 8</div>
+    </div>
+
+    <!-- Slide 8: Expected Outcomes -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2>Expected Results</h2>
+            <div class="success-box">
+                <h3>With Immediate Implementation</h3>
+                <div class="metric-grid" style="margin-top: 2rem;">
+                    <div class="metric-card">
+                        <div class="metric-value" style="background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);">
+                            -70%</div>
+                        <div class="metric-label">Reduction in Failed Payments</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" style="background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);">
+                            +$8,615</div>
+                        <div class="metric-label">Monthly Revenue Recovered</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" style="background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);">
+                            +$103,375</div>
+                        <div class="metric-label">Annual Revenue Saved</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" style="background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);">
+                            20-30</div>
+                        <div class="metric-label">Customers Recovered</div>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: 3rem; text-align: center;">
+                <h3 style="color: #f97316;">The Time to Act is NOW</h3>
+                <p style="font-size: 1.2rem; color: #cbd5e1; margin-top: 1rem;">
+                    Every day of delay costs your business approximately $410 in lost revenue
+                </p>
+            </div>
+        </div>
+        <div class="slide-number">8 / 8</div>
+    </div>
+
+    <script>
+        // Simple slide navigation
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        
+        function showSlide(n) {
+            slides[currentSlide].style.display = 'none';
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].style.display = 'flex';
+        }
+        
+        // Show first slide
+        slides.forEach((slide, index) => {
+            slide.style.display = index === 0 ? 'flex' : 'none';
+        });
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') showSlide(currentSlide + 1);
+            if (e.key === 'ArrowLeft') showSlide(currentSlide - 1);
+        });
+        
+        // Click navigation
+        document.addEventListener('click', () => {
+            showSlide(currentSlide + 1);
+        });
+    </script>
+</body>
+</html> 
